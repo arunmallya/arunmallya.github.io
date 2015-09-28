@@ -161,10 +161,34 @@
 
             Ignoring the non-linearities, we can re-write the above equations as one compact matrix multiplication:
             $$z_t = \begin{bmatrix}c'_t \\ i_t \\ f_t \\ o_t \end{bmatrix} = 
-            \begin{bmatrix}W_c & U_c & b_c \\ W_i & U_i & b_i \\ W_f & U_f & b_f \\ W_o & U_o & b_o \end{bmatrix} 
-            \times \begin{bmatrix}x_t \\ h_{t-1} \\ 1 \end{bmatrix} = W \times I_t$$
+            \begin{bmatrix}W_c & U_c & b_c \\ W_i & U_i & b_i \\ W_f & U_f & b_f \\ W_o & U_o & b_o \end{bmatrix}_{\ 4\times(n+1+1)}
+            \times \quad\quad \begin{bmatrix}x_t \\ h_{t-1} \\ 1 \end{bmatrix}_{\ (n+1+1)\times 1} = W \times I_t$$
+            where \( n \) is the size of the input \( x_t \).</br></br>
 
-            The non-linearities can then be applied, and the update in Eq. 4 and output in Eq. 6 can be computed.
+            The non-linearities can then be applied, and the update in Eq. 4 and output in Eq. 6 can be computed. </br>
+          </p>
+          <hr>
+
+          <p>
+            <p align = "center">
+              <b> <a name="forward_pass_ext">Forward Pass Extensions</a></b></br></br> 
+            </p>
+
+            The equation above can easily be extended to multiple LSTM memory units and batch inputs instead of a single input vector.</br></br>
+
+            <b> Multiple LSTM memory units</b>: Say we use \( d \) number of memory units. Each memory unit \( i \) will have its own weight matrix 
+            \( W_i \), with each \( U_\ast \) depending on the values of the \( d \) memory units. The equation can be extended to:
+            $$\begin{bmatrix} z_{1, t} \\ z_{2, t} \\ \vdots \\ z_{d, t} \end{bmatrix} 
+            = \begin{bmatrix} W_{1} \\ W_{2} \\ \vdots \\ W_{d} \end{bmatrix}_{\ 4d\times(n+d+1)}  
+            \times\quad\quad \begin{bmatrix}x_t \\ h_{1, t-1} \\ h_{2, t-1} \\ \vdots \\ h_{d, t-1} \\ 1 \end{bmatrix}_{\ (n+d+1)\times 1}$$
+
+            <b> Batch Inputs</b>: Say we want to process multiple vectors \( x_1, x_2, \cdots, x_m \) at the same time, where all 
+            of the vectors are of size \( n \) for the sake of convenience. The equation can be extended to:
+            $$\begin{bmatrix} z_{1, t} & z_{2, t} & \cdots & z_{m, t} \end{bmatrix} 
+            = W  \times \begin{bmatrix} I_{1, t} & I_{2, t} & \cdots & I_{m, t} \end{bmatrix}_{\ (n+1+1)\times m} $$
+
+            It is rather simple to see that both the above extensions can be applied at the same time.
+
           </p>
           <hr>
 
