@@ -1,0 +1,159 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content="HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org">
+    <style type="text/css">
+      /* Layout and HTML pieces the work of Jon Barron http://www.cs.berkeley.edu/~barron/ */
+      a {
+      color: #1772d1;
+      text-decoration:none;
+      }
+      a:focus, a:hover {
+      color: #f09227;
+      text-decoration:none;
+      }
+      body,td,th {
+      font-family: 'Lato', Verdana, Helvetica, sans-serif;
+      font-size: 14px
+      }
+      strong {
+      font-family: 'Lato', Verdana, Helvetica, sans-serif;
+      font-size: 14px
+      }
+      heading {
+      font-family: 'Lato', Verdana, Helvetica, sans-serif;
+      font-size: 15px;
+      font-weight: 700
+      }
+    </style>
+
+    <script type="text/javascript"
+      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <title>LSTM</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+
+  </head>
+
+  <body>
+    <table width="850" border="0" align="center" cellpadding="20">
+      <tr>
+	      <td> 
+
+          <p align="center"><font size="6">LSTM</font></p>
+
+          <p> 
+            The major component of an LSTM is its memory cell. Below, we'll quick go through how an LSTM performs computation
+            and updates its memory cell for an input at some time instant \( t \). </br>
+
+            <hr>
+
+            <p align="center"> 
+              <b>1. Input Value</b></br></br>
+              The figure below shows an LSTM unit with a single memory cell containing some value from the previous iteration at time \( t-1 \).</br>
+              It receives a new input \( x_t \), and uses its previous output \( h_{t-1} \) to compute a value \( c'_t \) through a 
+              usual neuronal layer  </br> with a tanh non-linearity.</br></br>
+              <img width="50%" src="images/input.png" alt="Current Input">
+            </p>
+            $$ c'_t = \text{tanh}(W_cx_t + U_ch_{t-1} + b_c) $$
+            <hr>
+
+            <p align="center"> 
+              <b>2. Input Gate Value</b></br></br>
+              Then comes into play, the input gate, which computes a value \( i_t \). This determines how much of \( c'_t \)
+              should be admitted further.</br>
+              Its usage will be shown in a few moments.</br></br>
+              <img width="50%" src="images/input_gate.png" alt="Input Gate">
+            </p>
+            $$ i_t = \sigma(W_ix_t + U_ih_{t-1} + b_i) $$
+            <p align="center"> 
+              The sigmoid non-linearity \( \sigma(\cdot) \) ensures that \( i_t \in [0, 1] \equiv [open, closed] \).
+            </p>
+            <hr>
+
+            <p align="center"> 
+              <b>3. Forget Gate Value</b></br></br>
+              Next, is the forget gate, which computes a value \( f_t \), which determines how much of the current cell value 
+              \( c_{t-1} \), should be remembered. Its usage will be shown in the next step.</br></br>
+              <img width="50%" src="images/forget_gate.png" alt="Forget Gate">
+            </p>
+            $$ f_t = \sigma(W_fx_t + U_fh_{t-1} + b_f) $$
+            <p align="center"> 
+              The sigmoid non-linearity \( \sigma(\cdot) \) ensures that \( f_t \in [0, 1] \equiv [open, closed] \).
+            </p>
+            <hr>
+
+            <p align="center"> 
+              <b>4. Memory Cell Update</b></br></br>
+              During this step, the value of the memory cell is updated with a combination of the value \( c'_t \) (computed from the 
+              current input \( x_t \) and previous output \( h_{t-1} \)), and the previous cell contents \( c_{t-1} \). </br>
+              The combination is based on the magnitudes of the input gate \( i_t \) and the forget gate \( f_t \).</br></br>
+              <img width="50%" src="images/update.png" alt="Cell Update">
+            </p>
+            $$ c_t = i_t \ast c'_t + f_t \ast c_{t-1} $$
+            <p align="center"> 
+              Note that an  \( f_t = 0 \) means that the previous cell content is totally discarded, while an \( i_t = 0 \) means
+              that the value computed from the current input is totally discarded.
+            </p>
+            <hr>
+
+            <p align="center"> 
+              <b>5. Output Gate Value</b></br></br>
+              Finally, the output gate comes into play. This produces a value \( o_t \) that depends not only on the current 
+              input and the previous output, but also on the updated (and current) cell value \( c_t \) .</br></br>
+              <img width="50%" src="images/output_gate.png" alt="Output Gate">
+            </p>
+            $$ o_t = \sigma(W_ox_t + U_oh_{t-1} + V_oc_t + b_o) $$
+            <p align="center"> 
+              The sigmoid non-linearity \( \sigma(\cdot) \) ensures that \( f_t \in [0, 1] \equiv [open, closed] \).
+            </p>
+            <hr>
+
+            <p align="center"> 
+              <b>6. Cell Output</b></br></br> 
+              Lastly, the LSTM cell computes an output value by passing the updated (and current) cell value through a non-linearity. </br>
+              The output gate determines how much of this computed output is actually passed out of the cell as the final output \( h_t \).</br></br>
+              <img width="60%" src="images/output.png" alt="Output Value">
+            </p>
+            $$ h_t = o_t \ast \text{tanh}(c_t) $$
+            <hr>
+
+          </p>
+
+          <p align="center"> 
+            <b>Forward Pass</b></br></br> 
+            Equations from all the above steps are presented below for clarity.
+            <ol style="display:table; margin:0 auto;">
+              <li> \( c'_t = \text{tanh}(W_cx_t + U_ch_{t-1} + b_c) \) </li>
+              <li> \( i_t = \sigma(W_ix_t + U_ih_{t-1} + b_i) \) </li>
+              <li> \( f_t = \sigma(W_fx_t + U_fh_{t-1} + b_f) \) </li>
+              <li> \( c_t = i_t \ast c'_t + f_t \ast c_{t-1} \) </li>
+              <li> \( o_t = \sigma(W_ox_t + U_oh_{t-1} + V_oc_t + b_o) \) </li>
+              <li> \( h_t = o_t \ast \text{tanh}(c_t) \) </li>
+            </ol></br>
+          </p>
+
+          <p align="center"> 
+            Note that if Eq. 5 did not contain the term dependent on \( c_t \), then Eqs. 1, 2, 3, and 5 would be symmetric, with terms
+            \( W_\ast, U_\ast, b_\ast \). We could then compute the values \( c'_t, i_t, f_t, o_t \) all at once by concatenating the 
+            \( W_\ast, U_\ast, b_\ast \) matrices/vectors. In fact, for purposes of computational efficiency, the term dependent on \( c_t \)
+            is often dropped.</br></br>
+
+            Ignoring the non-linearities, we can re-write the above equations as one compact matrix multiplication:
+            $$z_t = \begin{bmatrix}c'_t \\ i_t \\ f_t \\ o_t \end{bmatrix} = 
+            \begin{bmatrix}W_c & U_c & b_c \\ W_i & U_i & b_i \\ W_f & U_f & b_f \\ W_o & U_o & b_o \end{bmatrix} 
+            \times \begin{bmatrix}x_t \\ h_{t-1} \\ 1 \end{bmatrix} = W \times I_t$$
+
+            The non-linearities can then be applied, and the update in Eq. 4 and output in Eq. 6 can be computed.
+          </p>
+          <hr>
+
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
