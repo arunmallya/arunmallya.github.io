@@ -47,86 +47,102 @@
           <p align="center"><font size="6">LSTM</font></p>
 
           <p> 
-            The major component of an LSTM is its memory cell. Below, we'll quick go through how an LSTM performs computation
+            The major component of an LSTM is its memory cell. Below, we'll quickly go through how an LSTM performs computation
             and updates its memory cell for an input at some time instant \( t \). </br>
+          </p>  
+          <hr>
 
-            <hr>
-
-            <p align="center"> 
-              <b>1. Input Value</b></br></br>
-              The figure below shows an LSTM unit with a single memory cell containing some value from the previous iteration at time \( t-1 \).</br>
-              It receives a new input \( x_t \), and uses its previous output \( h_{t-1} \) to compute a value \( c'_t \) through a 
-              usual neuronal layer  </br> with a tanh non-linearity.</br></br>
-              <img width="50%" src="images/input.png" alt="Current Input">
-            </p>
-            $$ c'_t = \text{tanh}(W_cx_t + U_ch_{t-1} + b_c) $$
-            <hr>
-
-            <p align="center"> 
-              <b>2. Input Gate Value</b></br></br>
-              Then comes into play, the input gate, which computes a value \( i_t \). This determines how much of \( c'_t \)
-              should be admitted further.</br>
-              Its usage will be shown in a few moments.</br></br>
-              <img width="50%" src="images/input_gate.png" alt="Input Gate">
-            </p>
-            $$ i_t = \sigma(W_ix_t + U_ih_{t-1} + b_i) $$
-            <p align="center"> 
-              The sigmoid non-linearity \( \sigma(\cdot) \) ensures that \( i_t \in [0, 1] \equiv [open, closed] \).
-            </p>
-            <hr>
-
-            <p align="center"> 
-              <b>3. Forget Gate Value</b></br></br>
-              Next, is the forget gate, which computes a value \( f_t \), which determines how much of the current cell value 
-              \( c_{t-1} \), should be remembered. Its usage will be shown in the next step.</br></br>
-              <img width="50%" src="images/forget_gate.png" alt="Forget Gate">
-            </p>
-            $$ f_t = \sigma(W_fx_t + U_fh_{t-1} + b_f) $$
-            <p align="center"> 
-              The sigmoid non-linearity \( \sigma(\cdot) \) ensures that \( f_t \in [0, 1] \equiv [open, closed] \).
-            </p>
-            <hr>
-
-            <p align="center"> 
-              <b>4. Memory Cell Update</b></br></br>
-              During this step, the value of the memory cell is updated with a combination of the value \( c'_t \) (computed from the 
-              current input \( x_t \) and previous output \( h_{t-1} \)), and the previous cell contents \( c_{t-1} \). </br>
-              The combination is based on the magnitudes of the input gate \( i_t \) and the forget gate \( f_t \).</br></br>
-              <img width="50%" src="images/update.png" alt="Cell Update">
-            </p>
-            $$ c_t = i_t \ast c'_t + f_t \ast c_{t-1} $$
-            <p align="center"> 
-              Note that an  \( f_t = 0 \) means that the previous cell content is totally discarded, while an \( i_t = 0 \) means
-              that the value computed from the current input is totally discarded.
-            </p>
-            <hr>
-
-            <p align="center"> 
-              <b>5. Output Gate Value</b></br></br>
-              Finally, the output gate comes into play. This produces a value \( o_t \) that depends not only on the current 
-              input and the previous output, but also on the updated (and current) cell value \( c_t \) .</br></br>
-              <img width="50%" src="images/output_gate.png" alt="Output Gate">
-            </p>
-            $$ o_t = \sigma(W_ox_t + U_oh_{t-1} + V_oc_t + b_o) $$
-            <p align="center"> 
-              The sigmoid non-linearity \( \sigma(\cdot) \) ensures that \( f_t \in [0, 1] \equiv [open, closed] \).
-            </p>
-            <hr>
-
-            <p align="center"> 
-              <b>6. Cell Output</b></br></br> 
-              Lastly, the LSTM cell computes an output value by passing the updated (and current) cell value through a non-linearity. </br>
-              The output gate determines how much of this computed output is actually passed out of the cell as the final output \( h_t \).</br></br>
-              <img width="60%" src="images/output.png" alt="Output Value">
-            </p>
-            $$ h_t = o_t \ast \text{tanh}(c_t) $$
-            <hr>
-
+          <p align="center"> 
+            <b>Computation Steps in an LSTM Forward Pass:</b>
+            <ol style="display:table; margin:0 auto;">
+              <li><a href="#input"> Input Value </a></li>
+              <li><a href="#input_gate"> Input Gate Value </a></li>
+              <li><a href="#forget_gate"> Forget Gate Value </a></li>
+              <li><a href="#update"> Memory Cell Update </a></li>
+              <li><a href="#output_gate"> Output Gate Value </a></li>
+              <li><a href="#output"> Cell Output </a></li>
+            </ol></b></br>
           </p>
 
           <p align="center"> 
-            <b>Forward Pass</b></br></br> 
-            Equations from all the above steps are presented below for clarity.
+            <b><a href="#forward_pass">LSTM Forward Pass Equations</a></b>
+          </p><hr>       
+
+          </br></br>
+
+          <p align="center"> 
+            <b><a name="input">1. Input Value</a></b></br></br>
+            The figure below shows an LSTM unit with a single memory cell containing some value from the previous iteration at time \( t-1 \).</br>
+            It receives a new input \( x_t \), and uses its previous output \( h_{t-1} \) to compute a value \( c'_t \) through a 
+            usual neuronal layer  </br> with a tanh non-linearity.</br></br>
+            <img width="50%" src="images/input.png" alt="Current Input">
+          </p>
+          $$ c'_t = \text{tanh}(W_cx_t + U_ch_{t-1} + b_c) $$
+          <hr>
+
+          <p align="center"> 
+            <b><a name="input_gate">2. Input Gate Value</a></b></br></br>
+            Then comes into play, the input gate, which computes a value \( i_t \). This determines how much of \( c'_t \)
+            should be admitted further.</br>
+            Its usage will be shown in a few moments.</br></br>
+            <img width="50%" src="images/input_gate.png" alt="Input Gate">
+          </p>
+          $$ i_t = \sigma(W_ix_t + U_ih_{t-1} + b_i) $$
+          <p align="center"> 
+            The sigmoid non-linearity \( \sigma(\cdot) \) ensures that \( i_t \in [0, 1] \equiv [open, closed] \).
+          </p>
+          <hr>
+
+          <p align="center"> 
+            <b><a name="forget_gate">3. Forget Gate Value</a></b></br></br>
+            Next, is the forget gate, which computes a value \( f_t \), which determines how much of the current cell value 
+            \( c_{t-1} \), should be remembered. Its usage will be shown in the next step.</br></br>
+            <img width="50%" src="images/forget_gate.png" alt="Forget Gate">
+          </p>
+          $$ f_t = \sigma(W_fx_t + U_fh_{t-1} + b_f) $$
+          <p align="center"> 
+            The sigmoid non-linearity \( \sigma(\cdot) \) ensures that \( f_t \in [0, 1] \equiv [open, closed] \).
+          </p>
+          <hr>
+
+          <p align="center"> 
+            <b><a name="update">4. Memory Cell Update</a></b></br></br>
+            During this step, the value of the memory cell is updated with a combination of the value \( c'_t \) (computed from the 
+            current input \( x_t \) and previous output \( h_{t-1} \)), and the previous cell contents \( c_{t-1} \). </br>
+            The combination is based on the magnitudes of the input gate \( i_t \) and the forget gate \( f_t \).</br></br>
+            <img width="50%" src="images/update.png" alt="Cell Update">
+          </p>
+          $$ c_t = i_t \ast c'_t + f_t \ast c_{t-1} $$
+          <p align="center"> 
+            Note that an  \( f_t = 0 \) means that the previous cell content is totally discarded, while an \( i_t = 0 \) means
+            that the value computed from the current input is totally discarded.
+          </p>
+          <hr>
+
+          <p align="center"> 
+            <b><a name="output_gate">5. Output Gate Value</a></b></br></br>
+            Finally, the output gate comes into play. This produces a value \( o_t \) that depends not only on the current 
+            input and the previous output, but also on the updated (and current) cell value \( c_t \) .</br></br>
+            <img width="50%" src="images/output_gate.png" alt="Output Gate">
+          </p>
+          $$ o_t = \sigma(W_ox_t + U_oh_{t-1} + V_oc_t + b_o) $$
+          <p align="center"> 
+            The sigmoid non-linearity \( \sigma(\cdot) \) ensures that \( f_t \in [0, 1] \equiv [open, closed] \).
+          </p>
+          <hr>
+
+          <p align="center"> 
+            <b><a name="output">6. Cell Output</a></b></br></br> 
+            Lastly, the LSTM cell computes an output value by passing the updated (and current) cell value through a non-linearity. </br>
+            The output gate determines how much of this computed output is actually passed out of the cell as the final output \( h_t \).</br></br>
+            <img width="60%" src="images/output.png" alt="Output Value">
+          </p>
+          $$ h_t = o_t \ast \text{tanh}(c_t) $$
+          <hr>
+
+          <p align="center"> 
+            <b> <a name="forward_pass">Forward Pass</a></b></br></br> 
+            Equations from all the above steps are presented below for clarity:
             <ol style="display:table; margin:0 auto;">
               <li> \( c'_t = \text{tanh}(W_cx_t + U_ch_{t-1} + b_c) \) </li>
               <li> \( i_t = \sigma(W_ix_t + U_ih_{t-1} + b_i) \) </li>
@@ -151,6 +167,8 @@
             The non-linearities can then be applied, and the update in Eq. 4 and output in Eq. 6 can be computed.
           </p>
           <hr>
+
+          </br></br></br></br></br></br></br></br>
 
         </td>
       </tr>
