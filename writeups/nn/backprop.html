@@ -47,106 +47,123 @@
           <p align="center"><font size="6">Backpropagation</font></p>  
           <hr>
 
-          <p align="center"> 
-            <b> <a name="multiple_layers">Multiple Layers</a></b></br></br> 
-            Consider a network made of multiple layers, connected to some loss function \( E(\cdot) \) at the top.</br> 
-            We'll look at a part of this network connected as shown in the figure below. We'll index these layers
-            by \(\{\cdots, L-2, L-1, L, \cdots\}\). Further, we'll index individual neurons in these layers by \(i, j\) 
-            as shown in the figure.</br></br>
-            <img width="30%" src="images/layers.png" alt="Current Input">
+          <p> 
+            <p align = "center"><b><a name="multiple_layers">Multiple Layers</a></b></p>
+            Consider a network made of multiple layers, connected to some error function \( E(\cdot) \) at the top, as shown in the figure below.</br> 
+            Each layer takes in some input, transforms it in some fashion, and then produces some output, which is then passed on to the next layer, until the error layer is reached. Once the error is computed with respect to the target, corrective gradients are passed down to change the network parameters.
+            <p align = "center"><img width="20%" src="images/layers.png" alt="Current Input"></p>
           </p>
           <hr>
 
-          <p align="center"> 
-            <b> <a name="single_layer">A Single Layer</a></b></br></br> 
-            Let's zoom into a single layer, \(L\), made up of a number of neurons, each of which receives
-            outputs from the neurons of layer \(L-1\) as input. The outputs of neurons of layer \(L\) are denoted by
-            \(o^L_i\), and those of layer \(L-1\) are denoted by \(o_j^{L-1}\). </br>
-            (Remember that we decided to index neurons in layers \(L\) and \(L-1\) by \(i\) and \(j\) resp.)</br>
-            The weight connecting neuron \(i\) in layer \(L-1\) to neuron \(j\) in layer \(L\) is denoted by \(w_{i,j}\).</br> 
-            </br></br>
-            <img width="60%" src="images/layer.png" alt="Current Input">
+          <p> 
+            <p align="center"><b> <a name="generic_layer">A Generic Layer</a></b></p>
+            Most layers can be represented as applying some function \(f(\cdot)\) with parameters \(w\), on the input vector \(x\) of length \(m\) to produce output \(y\) of length \(n\). We'll use \(i\) to index values of \(x\) and \(j\) to index values of \(y\) in the parts that follow.</br> 
+            Some layers might take in or produce multiple input/output values. A simple example is a loss layer which takes in input predictions and truth targets and then produces a corresponding error value.</br> 
+            Some layers might not have any parameters \(w\) but instead just apply a fixed function. Examples of such layers include loss layers and non-linearity layers such as sigmoid, tanh, ReLU.
+            <p align="center"><img width="30%" src="images/generic_layer.png" alt="Generic Layer"></p>
           </p>
           <hr>
 
-          <p align="center"> 
-            <b> <a name="eqs">Neuron Equations</a></b></br></br> 
-            The output of a neuron in layer \(L\) is given by:
-            $$ o_i^L = \varphi(\text{net}_i^L) = \varphi\left(\sum_{k=1}^n w_{i,k}\cdot o_k^{L-1}\right)$$
-            where \(\varphi(\cdot)\) is some non-linearity such as the sigmoid or tanh.</br></br>
+          In the parts that follow, we'll look at some common layers and derive backpropagation equations for them.
 
-            Using the chain rule, we'll break up the derivative of the network error \(E\) with respect to the neuron weight \(w_{i,j}\):
-            \begin{align}
-              \Delta w_{i,j} = \frac{\partial E}{\partial w_{i,j}} &= \left( \frac{\partial E}{\partial \text{net}_i^L} \right)
-              \cdot \left( \frac{\partial \text{net}_i^L}{\partial w_{i,j}} \right) = \delta_i^L \cdot \left( \frac{\partial \text{net}_i^L}{\partial w_{i,j}} \right)\\
-            \end{align}
+          <hr>
+          <p> 
+            <p align="center"><b> <a name="l2_loss_layer">Euclidean Loss Layer</a></b></p>
+            Consider the Euclidean Loss Layer. This takes in some input \(x\) and measures how far this input is from the expected targets \(t\). This layer technically produces the amount of error as its output, but loss layers are the end of a network, and its output is not passed on to any layer. So, our \(y\) here is non-existent. Also, this loss function is not parameterized by any weights \(w\).
+            <p align="center"><img width="30%" src="images/l2_loss_layer.png" alt="Generic Layer"></p>
+            <p align="center">
+              \begin{align}
+                \text{Error} = E &= \frac{1}{2}\sum_{i=1}^m (x_i - t_i)^2 \\
+                \frac{\partial E}{\partial x_i} &= \frac{1}{2} \cdot 2 \cdot (x_i - t_i) = (x_i - t_i)\\
+                \delta x &= \left[ \frac{\partial E}{\partial x_i} \right]_i = x - t
+              \end{align}
+              \(\delta x\) and \( t \) are of size \(m \times 1\)
 
-            Now, we'll solve each component above one by one:
-            <ol>
-              <li> 
-                \(
-                  \left(\displaystyle\frac{\partial \text{net}_i^L}{\partial w_{i,j}}\right) = \displaystyle\frac{\partial \left(\displaystyle\sum_{k=1}^n w_{i,k}\cdot o_k^{L-1}\right)}{\partial w_{i,j}} = o_j^{L-1}
-                \)
-              </li></br></br>
+              $$
+                \boxed{
+                  \begin{align}
+                    \delta x &= x - t \\
+                    \delta w &= \text{N.A.}
+                  \end{align}
+                }
+              $$
+            </p>
+          </p>
+          <hr>
 
-              <li> 
-                \( \delta_i^L \) is provided by the layer \(L+1\) above.</br>
-                This means that at layer \(L\), we'll have to compute and pass \( \delta_j^{L-1} \) to the layer \(L-1\) below.</br> Let's compute it then!
-                </br></br>
+          <p> 
+            <p align="center"><b> <a name="sigmoid_layer">Sigmoid Layer</a></b></p>
+            The sigmoid layer takes in some input \(x\) and applies the sigmoid function on each value in \(x\) to produce output \(y\). The sigmoid function too, does not have any parameters \(w\). It just applies a fixed transformation shown below, on each input value.
+            $$
+              y_i = \frac{1}{1+e^{-x_i}}
+            $$
+            <p align="center"><img width="30%" src="images/sigmoid_layer.png" alt="Sigmoid Layer"></p>
+            <p align="center">
+              \begin{align}
+                \frac{\partial E}{\partial x_i} &= \frac{\partial E}{\partial y_i} \cdot \frac{\partial y_i}{\partial x_i} = \delta y_i \cdot \frac{\partial y_i}{\partial x_i}\\
+                \frac{\partial y_i}{\partial x_i} &= \frac{e^{-x_i}}{(1+e^{-x_i})^2} = y_i \cdot (1-y_i)\\
+                \therefore \frac{\partial E}{\partial x_i} &= \delta y_i \cdot y_i \cdot (1-y_i)\\
+                \delta x &= \left[ \frac{\partial E}{\partial x_i} \right]_i = \delta y \odot y \odot (1-y)
+              \end{align}
+              Note that in this layer, \( m=n \)</br>
+              \(\delta x\) is of size \(m \times 1\), \(\delta y\) is of size \(n \times 1\), \(y\) and \((1-y)\) are of size \(n \times 1\)
+
+              $$
+                \boxed{
+                  \begin{align}
+                    \delta x &= \delta y \odot y \odot (1-y) \\
+                    \delta w &= \text{N.A.}
+                  \end{align}
+                }
+              $$
+            </p>
+          </p>
+          <hr>
+
+          <p> 
+            <p align="center"> <b> <a name="fc_layer">Fully Connected Layer</a></b></br></br> </p>
+            
+            In the fully connected layer, each output neuron \(y_1, \cdots, y_n \) is connected to each input value \(x_1, \cdots, x_m\) with a weight \(w_{ji}\).
+            The collection of all weights, \( W = \{ w_{ji} \} \), is the set of parameters of this layer. \(W\) is a matrix of size \( n \times m \).
+            The relationship between the inputs and outputs is shown below.</br>
+
+            <p align="center">
+
+              \( y_j = \displaystyle\sum_{i=1}^m w_{ji} \cdot x_i \) or equivalently in matrix form, \( y = W \times x \), where \(W = \left[ w_{ji} \right]\) is of size \( n \times m \)
+              <img width="60%" src="images/fc_layer.png" alt="Current Input">
+            
+              $$
                 \begin{align}
-                  \delta_j^{L-1} = \frac{\partial E}{\partial \text{net}_j^{L-1}} &= 
-                  \left( \frac{\partial E}{\partial o_j^{L-1}} \right)\cdot\left( \frac{\partial o_j^{L-1}}{\partial \text{net}_j^{L-1}} \right) \\
-                  &= 
-                  \left( \displaystyle\sum_{i=1}^m \frac{\partial E}{\partial \text{net}_i^L} \cdot \frac{\partial \text{net}_i^L}{\partial o_j^{L-1}} \right)\cdot\left( \frac{\partial o_j^{L-1}}{\partial \text{net}_j^{L-1}} \right)
+                  \frac{\partial E}{\partial x_{i}} &= \sum_{j=1}^n \left( \frac{\partial E}{\partial y_j} \cdot \frac{\partial y_j}{\partial x_i} \right) \\
+                  \frac{\partial y_j}{\partial x_i} &= \frac{\partial \left( \displaystyle\sum_{i=1}^m w_{ji} \cdot x_i\right)}{\partial x_i} =  w_{ji}\\
+                  \therefore \frac{\partial E}{\partial x_{i}} &= \sum_{j=1}^n \left( \delta y_j \cdot w_{ji} \right) = \sum_{j=1}^n \left( w^T_{ij} \cdot \delta y_j \right)\\
+                  \delta x &= \left[ \frac{\partial E}{\partial x_{i}} \right]_i = W^T \times \delta y
                 \end{align}
+              $$
+              \(\delta x\) is of size \(m \times 1\), \(W^T\) is of size \(m \times n\), \(y\) is of size \(n \times 1\)
+              <hr width="40%">
 
-                <p align="center"> 
-                  The sum above arises because \(o_j^{L-1}\) is used by all neurons \(\{i\}\) in layer \(L\).</br> 
-                  Thus, the total error flowing downwards into \(\{j\}\) is the sum of the errors from each of the neurons in layer \(L\).</br></br>
-                  Let's examine the components:
-                </p>
+              $$
+                \begin{align}
+                  \frac{\partial E}{\partial w_{ji}} &= \frac{\partial E}{\partial y_j} \cdot \frac{\partial y_j}{\partial w_{ji}} = \delta y_j \cdot \frac{\partial y_j}{\partial w_{ji}}\\
+                  \frac{\partial y_j}{\partial w_{ji}} &= \frac{\partial \left( \displaystyle\sum_{i=1}^m w_{ji} \cdot x_i\right)}{\partial w_{ji}} =  x_i\\
+                  \therefore \frac{\partial E}{\partial w_{ji}} &= \delta y_j \cdot x_i\\
+                  \delta w &= \left[ \frac{\partial E}{\partial w_{ji}} \right]_{ji} = \delta y \times x^T \\
+                \end{align}
+              $$
+              <p align="center">
+                \(\delta w\) is of size \(n \times m\), \(\delta y\) is of size \(n \times 1\), \(x^T\) is of size \(1 \times m\)
+              </p>
 
-                <ol style="display:table; margin:0 auto;">
-                  <li type="a">
-                    \(
-                      \displaystyle\frac{\partial E}{\partial \text{net}_i^L} = \delta_i^L
-                    \)</br> 
-                    by definition and is passed from the layer \(L+1\) above layer \(L\)
-                  </li></br>
-                  <li type="a">
-                    \(
-                      \displaystyle\frac{\partial \text{net}_i^L}{\partial o_j^{L-1}} = \displaystyle\frac{\partial\left(\displaystyle\sum_{k=1}^n w_{i,k}\cdot o_k^{L-1}\right)}{\partial o_j^{L-1}} = w_{i, j}
-                    \) 
-                  </li></br>
-                  <li type="a">
-                    \(
-                      \displaystyle\frac{\partial o_j^{L-1}}{\partial \text{net}_j^{L-1}} = \displaystyle\frac{\partial \left(\varphi(\text{net}_j^{L-1})\right)}{\partial \text{net}_j^{L-1}} = \varphi'(\text{net}_j^{L-1})
-                    \)</br>
-                    If \(\varphi(\cdot)\) is a sigmoid, then \(\varphi'(\cdot) = \varphi(\cdot) (1 - \varphi(\cdot))\)</br>
-                    If \(\varphi(\cdot)\) is tanh, then \(\varphi'(\cdot) =  (1 - \varphi^2(\cdot))\)
-                  </li>
-                </ol>
-              </li>
-            </ol>
-
-            $$
-            \boxed{
-              \therefore \delta_j^{L-1} = \varphi'(net_j^{L-1}) \cdot \sum_{i=1}^m \delta_i^L \cdot w_{i,j}}
-            $$
-
-          </p>
-          <hr>
-
-          <p align="center"> 
-            <b> <a name="mat_eqs">Matrix Form</a></b></br></br>
-            Putting the above equations into matrix form, we get:
-            $$
-              \boxed{\left( \Delta W \right)_{m\times n} = {\left(\delta^L\right)}_{m\times 1} \times {\left( (o^{L-1})^T \right)}_{1\times n}}
-            $$ 
-            and
-            $$
-              \boxed{\left( \delta^{L-1} \right)_{n\times 1} = \left(\varphi'(net^{L-1})\right)_{n\times 1} \circ \left(W^T_{n\times m} \times \delta^L_{m\times 1} \right)}
-            $$  
+              $$
+                \boxed{
+                  \begin{align}
+                    \delta x &= W^T \times \delta y \\
+                    \delta w &= \delta y \times x^T 
+                  \end{align}
+                }
+              $$
+            </p>
           </p>
           <hr>
 
