@@ -69,11 +69,14 @@
           <hr>
           <p> 
             <p align="center"><b> <a name="l2_loss_layer">Euclidean Loss Layer</a></b></p>
-            Consider the Euclidean Loss Layer. This takes in some input \(x\) and measures how far this input is from the expected targets \(t\). This layer technically produces the amount of error as its output, but loss layers are the end of a network, and its output is not passed on to any layer. So, our \(y\) here is non-existent. Also, this loss function is not parameterized by any weights \(w\).
+            Consider the Euclidean Loss Layer. This takes in some input \(x\) and measures how far this input is from the expected targets \(t\). This layer technically produces the amount of error as its output, but loss layers are the end of a network, and its output is not passed on to any layer. So, our \(y\) here is non-existent. Also, this error (loss) function is not parameterized by any weights \(w\) as shown below.
+            <p align="center">
+              Error \( = E = \displaystyle\frac{1}{2}\displaystyle\sum_{i=1}^m (x_i - t_i)^2 \)
+            </p>
+
             <p align="center"><img width="30%" src="images/l2_loss_layer.png" alt="Generic Layer"></p>
             <p align="center">
               \begin{align}
-                \text{Error} = E &= \frac{1}{2}\sum_{i=1}^m (x_i - t_i)^2 \\
                 \frac{\partial E}{\partial x_i} &= \frac{1}{2} \cdot 2 \cdot (x_i - t_i) = (x_i - t_i)\\
                 \delta x &= \left[ \frac{\partial E}{\partial x_i} \right]_i = x - t
               \end{align}
