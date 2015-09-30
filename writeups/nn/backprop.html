@@ -65,11 +65,11 @@
           <hr>
 
           In the parts that follow, we'll look at some common layers and derive backpropagation equations for them.
-
           <hr>
+
           <p> 
             <p align="center"><b> <a name="l2_loss_layer">Euclidean Loss Layer</a></b></p>
-            Consider the Euclidean Loss Layer. This takes in some input \(x\) and measures how far this input is from the expected targets \(t\). This layer technically produces the amount of error as its output, but loss layers are the end of a network, and its output is not passed on to any layer. So, our \(y\) here is non-existent. Also, this error (loss) function is not parameterized by any weights \(w\) as shown below.
+            The Euclidean Loss Layer takes in some input \(x\) and measures how far this input is from the expected targets \(t\) using the equation below. This layer technically produces the amount of error as its output, but loss layers are the end of a network, and its output is not passed on to any layer. So, our \(y\) here is non-existent. Also, this error (loss) function is not parameterized by any weights \(w\) as shown below.
             <p align="center">
               Error \( = E = \displaystyle\frac{1}{2}\displaystyle\sum_{i=1}^m (x_i - t_i)^2 \)
             </p>
@@ -86,6 +86,32 @@
                 \boxed{
                   \begin{align}
                     \delta x &= x - t \\
+                    \delta w &= \text{N.A.}
+                  \end{align}
+                }
+              $$
+            </p>
+          </p>
+          <hr>
+
+          <p> 
+            <p align="center"><b> <a name="log_loss_layer">Log Loss Layer</a></b></p>
+            The log loss also measure the deviation of the input \(x\) from the true output targets \(t\), but using a different equation shown below.
+            <p align="center">
+              Error \( = E = -\displaystyle\sum_{i=1}^m t_i\log x_i + (1-t_i) \log (1-x_i) \)
+            </p>
+            <hr width="40%">
+            <p align="center">
+              \begin{align}
+                \frac{\partial E}{\partial x_i} &= -\frac{t_i}{x_i} +  \frac{(1-t_i)}{(1-x_i)} = \frac{x_i-t_i}{x_i(1-x_i)} \\
+                \delta x &= \left[ \frac{\partial E}{\partial x_i} \right]_i = (x - t) \odot \frac{1}{x} \odot \frac{1}{(1-x)}
+              \end{align}
+              \(\delta x\) and \( t \) are of size \(m \times 1\)
+
+              $$
+                \boxed{
+                  \begin{align}
+                    \delta x &= (x - t) \odot \frac{1}{x} \odot \frac{1}{(1-x)} \\
                     \delta w &= \text{N.A.}
                   \end{align}
                 }
@@ -115,6 +141,51 @@
                 \boxed{
                   \begin{align}
                     \delta x &= \delta y \odot y \odot (1-y) \\
+                    \delta w &= \text{N.A.}
+                  \end{align}
+                }
+              $$
+            </p>
+          </p>
+          <hr>
+
+          <p> 
+            <p align="center"><b> <a name="softmax_layer">Softmax Layer</a></b></p>
+            The softmax layer normalizes its inputs \(x\) to produce outputs \(y\) such that sum of output values is 1, using the equation below. This layer is used to produce outputs which can be interpreted as probability distributions. It is thus very commonly used in networks predicting class probabilities of inputs. Note that an output \(y_j\) depends on every input \(x_i\).
+            $$
+              y_i = \frac{e^{x_i}}{\sum_{k=1}^m e^{x_k}}
+            $$
+            <hr width="40%">
+            <p align="center">
+              \begin{align}
+                \frac{\partial E}{\partial x_i} &= \sum_{j=1}^n \left( \frac{\partial E}{\partial y_j} \cdot \frac{\partial y_j}{\partial x_i} \right)\\
+                \text{If } i=j, \frac{\partial y_i}{\partial x_i} &=  \frac{\partial}{\partial x_i} \left\{ \frac{e^{x_i}}{\sum_{k=1}^m e^{x_k}} \right\}\\
+                &= \frac{ e^{x_i} - \left(e^{x_i}\right)^2} { \left(\sum_{k=1}^m e^{x_k}\right)^{2} } \\
+                &= \frac{ e^{x_i}} {\sum_{k=1}^m e^{x_k} } \cdot \frac{ 1-e^{x_i}} { \sum_{k=1}^m e^{x_k} }\\
+                &= y_i \cdot (1-y_i)\\
+                &= y_i \cdot (\mathbf{1}\{ i=j \} - y_j)\\
+                \text{If } i\neq j, \frac{\partial y_i}{\partial x_i} &=  \frac{\partial}{\partial x_i} \left\{ \frac{e^{x_j}}{\sum_{k=1}^m e^{x_k}} \right\}\\
+                &=  \frac{-e^{x_i}\cdot e^{x_j}}{\left(\sum_{k=1}^m e^{x_k}\right)^2} \\
+                &= \frac{-e^{x_i}}{\sum_{k=1}^m e^{x_k}} \cdot \frac{e^{x_j}}{\sum_{k=1}^m e^{x_k}}\\
+                &= -y_i \cdot y_j\\
+                &= y_i \cdot (\mathbf{1}\{ i=j \} - y_j)
+              \end{align}
+              <hr width="40%">  
+              \begin{align}
+                \therefore \frac{\partial E}{\partial x_i} &= \sum_{j=1}^n \delta y_j \cdot y_i \cdot (\mathbf{1}\{ i=j \} - y_j)\\
+                &= \sum_{j=1}^n J_{ij} \times \delta y_j\\
+                \text{where } J_{ij} &= y_i \cdot (\mathbf{1}\{ i=j \} - y_j)\\
+                \delta x &= \left[ \frac{\partial E}{\partial x_i} \right]_i = J \times \delta y 
+              \end{align}
+              <p align="center">
+                Note that in this layer, \( m=n \)</br>
+                \(\delta x\) is of size \(m \times 1\), \( J \) is of size \( m \times n \), \(\delta y\) is of size \(n \times 1\)
+              </p>
+
+              $$
+                \boxed{
+                  \begin{align}
+                    \delta x &= J \times \delta y \\
                     \delta w &= \text{N.A.}
                   \end{align}
                 }
