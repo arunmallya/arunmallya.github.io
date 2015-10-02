@@ -53,10 +53,10 @@
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="60%">
+			  		<td width="55%">
 			  			<img  src="../images/lstm/lstm_initial.png">
 			  		</td>
-			  		<td width="40%">
+			  		<td width="45%">
 			  		</td>
 				  	</tr>
 					</table>
@@ -69,10 +69,10 @@
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="60%">
+			  		<td width="55%">
 			  			<img  src="../images/lstm/lstm_gates_and_input.png">
 			  		</td>
-			  		<td width="40%">
+			  		<td width="45%">
 			  			\begin{align}
 			  				a^t &= \text{tanh}(W_cx^t + U_ch^{t-1}) \\
 			  				i^t &= \sigma(W_ix^t + U_ih^{t-1}) \\
@@ -109,10 +109,10 @@
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="60%">
+			  		<td width="55%">
 			  			<img  src="../images/lstm/lstm_update.png">
 			  		</td>
-			  		<td width="40%">
+			  		<td width="45%">
 			  			$$ c^t = i^t \odot a^t + f^t \odot c^{t-1} $$
 			  		</td>
 				  	</tr>
@@ -126,10 +126,10 @@
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="60%">
+			  		<td width="55%">
 			  			<img  src="../images/lstm/lstm_updated.png">
 			  		</td>
-			  		<td width="40%">
+			  		<td width="45%">
 			  			$$ c^{t-1} \rightarrow c^t $$
 			  		</td>
 				  	</tr>
@@ -137,18 +137,118 @@
 				</section>
 
 				<section>
-					<h3>Forward Pass: LSTM Output</h3>
+					<h3>Forward Pass: Output</h3>
 					<p class="topbar">
 						Finally, the LSTM cell computes an output value by passing the updated (and current) cell value through a non-linearity. 
             			The output gate determines how much of this computed output is actually passed out of the cell as the final output \( h^t \).
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="60%">
+			  		<td width="55%">
 			  			<img  src="../images/lstm/lstm_output.png">
 			  		</td>
-			  		<td width="40%">
+			  		<td width="45%">
 			  			$$ h^t = o^t \odot \text{tanh}(c^t) $$
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
+				<!-- Backward Pass -->
+				<section>
+					<h3>Backward Pass: Output</h3>
+					<p class="topbar">
+					</p>
+					<table width="100%">
+					<tr>
+			  		<td width="55%">
+			  			<img  src="../images/lstm/back_output.png">
+			  		</td>
+			  		<td width="45%">
+			  			\begin{align}
+			  				\text{Forward Pass: } h^t &= o^t \odot \tanh(c^t) \\
+			  				\text{Given } \delta h^t &= \displaystyle\frac{\partial E}{ \partial h^t}, \text{find } \delta o^t, \delta c^t
+			  			\end{align}
+			  			<hr>
+			  			\begin{align}
+			  				\frac{\partial E}{\partial o^t_i} &= \frac{\partial E}{\partial h^t_i} \cdot \frac{\partial h^t_i}{\partial o^t_i}\\
+			  				&= \delta h^t_i \cdot \tanh(c^t_i) \\
+			  				\therefore \delta o^t &= \delta h^t \odot \tanh(c^t)\\ \\
+
+			  				\frac{\partial E}{\partial c^t_i} &= \frac{\partial E}{\partial h^t_i} \cdot \frac{\partial h^t_i}{\partial c^t_i}\\
+			  				&= \delta h^t_i \cdot o^t_i \cdot (1-\tanh^2(c^t_i))\\
+			  				\therefore \delta c^t &= \delta h^t \odot o^t \odot (1-\tanh^2(c^t))
+			  			\end{align}
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
+				<section>
+					<h3>Backward Pass: LSTM Memory Cell Update</h3>
+					<p class="topbar">
+					</p>
+					<table width="100%">
+					<tr>
+			  		<td width="55%">
+			  			<img  src="../images/lstm/back_cell.png">
+			  		</td>
+			  		<td width="45%">
+			  			\begin{align}
+			  				\text{Forward Pass: } c^t &= i^t \odot a^t + f^t \odot c^{t-1} \\
+			  				\text{Given } \delta c^t &= \displaystyle\frac{\partial E}{ \partial c^t}, \text{find } \delta i^t, \delta a^t, \delta f^t, \delta c^{t-1}
+			  			\end{align}
+			  			<hr>
+			  			\begin{array}{l|l}
+			  			\begin{align}
+			  				\frac{\partial E}{\partial i^t_i} &= \frac{\partial E}{\partial c^t_i} \cdot \frac{\partial c^t_i}{\partial i^t_i} 
+			  				& \frac{\partial E}{\partial f^t_i} &= \frac{\partial E}{\partial c^t_i} \cdot \frac{\partial c^t_i}{\partial f^t_i}\\
+
+			  				  &= \delta c^t_i \cdot a^t_i  
+			  				& &= \delta c^t_i \cdot c^{t-1}_i\\
+
+			  				  \therefore \delta i^t &= \delta c^t \odot a^t
+			  				& \therefore \delta f^t &= \delta c^t \odot c^{t-1}\\ \\
+
+			  				  \frac{\partial E}{\partial a^t_i} &= \frac{\partial E}{\partial c^t_i} \cdot \frac{\partial c^t_i}{\partial a^t_i}
+			  				& \frac{\partial E}{\partial c^{t-1}_i} &= \frac{\partial E}{\partial c^t_i} \cdot \frac{\partial c^t_i}{\partial c^{t-1}_i}\\
+
+			  				  &= \delta c^t_i \cdot i^t_i 
+			  				& &= \delta c^t_i \cdot f^t_i \\
+
+			  				  \therefore \delta a^t &= \delta c^t \odot i^t 
+			  				& \therefore \delta f^t &= \delta c^t \odot f^t 
+			  			\end{align}
+			  			\end{array}
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
+				<section>
+					<h3>Backward Pass: Input and Gate Computation</h3>
+					<p class="topbar">
+					</p>
+					<table width="100%">
+					<tr>
+			  		<td width="55%">
+			  			<img  src="../images/lstm/back_gates_and_input.png">
+			  		</td>
+			  		<td width="45%">
+			  			\begin{align}
+			  				\text{Forward Pass: } z^t &= W \times I^t \\
+			  				\text{Given } \delta a^t, \delta i^t &, \delta f^t, \delta o^t, \text{find } \delta o^t, \delta h^{t-1}
+			  			\end{align}
+			  			<hr>
+			  			\begin{align}
+			  				\frac{\partial E}{\partial o^t_i} &= \frac{\partial E}{\partial h^t_i} \cdot \frac{\partial h^t_i}{\partial o^t_i}\\
+			  				&= \delta h^t_i \cdot \tanh(c^t_i) \\
+			  				\therefore \delta o^t &= \delta h^t \odot \tanh(c^t)\\ \\
+
+			  				\frac{\partial E}{\partial c^t_i} &= \frac{\partial E}{\partial h^t_i} \cdot \frac{\partial h^t_i}{\partial c^t_i}\\
+			  				&= \delta h^t_i \cdot o^t_i \cdot (1-\tanh^2(c^t_i))\\
+			  				\therefore \delta c^t &= \delta h^t \odot o^t \odot (1-\tanh^2(c^t))
+			  			\end{align}
 			  		</td>
 				  	</tr>
 					</table>
