@@ -46,17 +46,17 @@
 			<div class="slides">
 				
 				<section>
-					<h3>Forward Pass: Intial State</h3>
+					<h3>Forward Pass: Initial State</h3>
 					<p class="topbar">
-						The figure below shows an LSTM unit with memory cells containing values from the 
+						Initially, at time \(t\), the memory cells of the LSTM contain values from the 
 						previous iteration at time \( (t-1) \).
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="65%">
-			  			<img src="../images/lstm/lstm_initial.png">
+			  		<td width="60%">
+			  			<img  src="../images/lstm/lstm_initial.png">
 			  		</td>
-			  		<td width="35%">
+			  		<td width="40%">
 			  		</td>
 				  	</tr>
 					</table>
@@ -65,14 +65,14 @@
 				<section>
 					<h3>Forward Pass: Input and Gate Computation</h3>
 					<p class="topbar">
-						At time \( t \), The LSTM receives a new input vector \( x^t \), as well as a vector of its output at the previous timestep, \( h^{t-1} \).
+						At time \( t \), The LSTM receives a new input vector \( x^t \) (including the bias term), as well as a vector of its output at the previous timestep, \( h^{t-1} \). 
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="65%">
-			  			<img src="../images/lstm/lstm_gates_and_input.png">
+			  		<td width="60%">
+			  			<img  src="../images/lstm/lstm_gates_and_input.png">
 			  		</td>
-			  		<td width="35%">
+			  		<td width="40%">
 			  			\begin{align}
 			  				a^t &= \text{tanh}(W_cx^t + U_ch^{t-1}) \\
 			  				i^t &= \sigma(W_ix^t + U_ih^{t-1}) \\
@@ -81,9 +81,10 @@
 			  			\end{align}
 			  			</br>
 			  			<hr>
+			  			<p align="center" style="margin:0; padding:0;">Ignoring the non-linearities, </p>
 			  			</br>
 			  			\begin{align}
-			  				z^t = \begin{bmatrix} a^t \\ i^t \\ f^t \\ o^t \end{bmatrix} &= 
+			  				z^t = \begin{bmatrix} \hat{a}^t \\ \hat{i}^t \\ \hat{f}^t \\ \hat{o}^t \end{bmatrix} &= 
             				\begin{bmatrix} W^c & U^c \\ W^i & U^i \\ W^f & U^f \\ W^o & U^o \end{bmatrix}
             				\times 
             				\begin{bmatrix} x^t \\ h^{t-1} \end{bmatrix} \\
@@ -92,6 +93,10 @@
 			  		</td>
 				  	</tr>
 					</table>
+					<p class="topbar">
+						If the input \(x^t\) is of size \(n \times 1\), and we have \(d\) memory cells, then the size of each of \(W_\ast\) and \(U_\ast\) is \(d \times n\), and and \(d \times d \) resp. The size of \(W\) will then be \(4d \times (n+d)\). 
+						Note that each one of the \(d\) memory cells has its own weights \(W_\ast\) and \(U_\ast\), and that the only time cell values are shared is during the product with \(U_\ast\).
+					</p>
 				</section>
 
 				<section>
@@ -100,14 +105,14 @@
 						During this step, the values of the memory cells are updated with a combination of \( a^t \),
 						and the previous cell 
 						contents \( c^{t-1} \). The combination is based on the magnitudes of the input gate \( i^t \) and the 
-						forget gate \( f^t \).
+						forget gate \( f^t \). \( \odot \) denotes elementwise product (Hadamard product).
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="65%">
-			  			<img src="../images/lstm/lstm_update.png">
+			  		<td width="60%">
+			  			<img  src="../images/lstm/lstm_update.png">
 			  		</td>
-			  		<td width="35%">
+			  		<td width="40%">
 			  			$$ c^t = i^t \odot a^t + f^t \odot c^{t-1} $$
 			  		</td>
 				  	</tr>
@@ -121,10 +126,10 @@
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="65%">
-			  			<img src="../images/lstm/lstm_updated.png">
+			  		<td width="60%">
+			  			<img  src="../images/lstm/lstm_updated.png">
 			  		</td>
-			  		<td width="35%">
+			  		<td width="40%">
 			  			$$ c^{t-1} \rightarrow c^t $$
 			  		</td>
 				  	</tr>
@@ -139,10 +144,10 @@
 					</p>
 					<table width="100%">
 					<tr>
-			  		<td width="65%">
-			  			<img src="../images/lstm/lstm_output.png">
+			  		<td width="60%">
+			  			<img  src="../images/lstm/lstm_output.png">
 			  		</td>
-			  		<td width="35%">
+			  		<td width="40%">
 			  			$$ h^t = o^t \odot \text{tanh}(c^t) $$
 			  		</td>
 				  	</tr>
