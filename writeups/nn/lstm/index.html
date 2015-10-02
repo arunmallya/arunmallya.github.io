@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>LSTM</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<script type="text/javascript"
+      		src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    	</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				
+				<section>
+					<h3>Forward Pass: Intial State</h3>
+					<p class="topbar">
+						The figure below shows an LSTM unit with memory cells containing values from the 
+						previous iteration at time \( (t-1) \).
+					</p>
+					<table width="100%">
+					<tr>
+			  		<td width="65%">
+			  			<img src="../images/lstm/lstm_initial.png">
+			  		</td>
+			  		<td width="35%">
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
+				<section>
+					<h3>Forward Pass: Input and Gate Computation</h3>
+					<p class="topbar">
+						At time \( t \), The LSTM receives a new input vector \( x^t \), as well as a vector of its output at the previous timestep, \( h^{t-1} \).
+					</p>
+					<table width="100%">
+					<tr>
+			  		<td width="65%">
+			  			<img src="../images/lstm/lstm_gates_and_input.png">
+			  		</td>
+			  		<td width="35%">
+			  			\begin{align}
+			  				a^t &= \text{tanh}(W_cx^t + U_ch^{t-1}) \\
+			  				i^t &= \sigma(W_ix^t + U_ih^{t-1}) \\
+			  				f^t &= \sigma(W_fx^t + U_fh^{t-1}) \\
+			  				o^t &= \sigma(W_ox^t + U_oh^{t-1})
+			  			\end{align}
+			  			</br>
+			  			<hr>
+			  			</br>
+			  			\begin{align}
+			  				z^t = \begin{bmatrix} a^t \\ i^t \\ f^t \\ o^t \end{bmatrix} &= 
+            				\begin{bmatrix} W^c & U^c \\ W^i & U^i \\ W^f & U^f \\ W^o & U^o \end{bmatrix}
+            				\times 
+            				\begin{bmatrix} x^t \\ h^{t-1} \end{bmatrix} \\
+            				&= W \times I^t
+            			\end{align}
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
+				<section>
+					<h3>Forward Pass: Memory Cell Update</h3>
+					<p class="topbar">
+						During this step, the values of the memory cells are updated with a combination of \( a^t \),
+						and the previous cell 
+						contents \( c^{t-1} \). The combination is based on the magnitudes of the input gate \( i^t \) and the 
+						forget gate \( f^t \).
+					</p>
+					<table width="100%">
+					<tr>
+			  		<td width="65%">
+			  			<img src="../images/lstm/lstm_update.png">
+			  		</td>
+			  		<td width="35%">
+			  			$$ c^t = i^t \odot a^t + f^t \odot c^{t-1} $$
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
+				<section>
+					<h3>Forward Pass: Updated Memory Cells</h3>
+					<p class="topbar">
+						The contents of the memory cells are updated to the latest values.
+					</p>
+					<table width="100%">
+					<tr>
+			  		<td width="65%">
+			  			<img src="../images/lstm/lstm_updated.png">
+			  		</td>
+			  		<td width="35%">
+			  			$$ c^{t-1} \rightarrow c^t $$
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
+				<section>
+					<h3>Forward Pass: LSTM Output</h3>
+					<p class="topbar">
+						Finally, the LSTM cell computes an output value by passing the updated (and current) cell value through a non-linearity. 
+            			The output gate determines how much of this computed output is actually passed out of the cell as the final output \( h^t \).
+					</p>
+					<table width="100%">
+					<tr>
+			  		<td width="65%">
+			  			<img src="../images/lstm/lstm_output.png">
+			  		</td>
+			  		<td width="35%">
+			  			$$ h^t = o^t \odot \text{tanh}(c^t) $$
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: false,
+
+				transition: 'none', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

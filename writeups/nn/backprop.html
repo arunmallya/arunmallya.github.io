@@ -51,7 +51,7 @@
             <p align = "center"><b><a name="multiple_layers">Multiple Layers</a></b></p>
             Consider a network made of multiple layers, connected to some error function \( E(\cdot) \) at the top, as shown in the figure below.</br> 
             Each layer takes in some input, transforms it in some fashion, and then produces some output, which is then passed on to the next layer, until the error layer is reached. Once the error is computed with respect to the target, corrective gradients are passed down to change the network parameters.
-            <p align = "center"><img width="20%" src="images/layers.png" alt="Current Input"></p>
+            <p align = "center"><img width="20%" src="images/layers/layers.png" alt="Current Input"></p>
           </p>
           <hr>
 
@@ -60,7 +60,7 @@
             Most layers can be represented as applying some function \(f(\cdot)\) with parameters \(w\), on the input vector \(x\) of length \(m\) to produce output \(y\) of length \(n\). We'll use \(i\) to index values of \(x\) and \(j\) to index values of \(y\) in the parts that follow.</br> 
             Some layers might take in or produce multiple input/output values. A simple example is a loss layer which takes in input predictions and truth targets and then produces a corresponding error value.</br> 
             Some layers might not have any parameters \(w\) but instead just apply a fixed function. Examples of such layers include loss layers and non-linearity layers such as sigmoid, tanh, ReLU.
-            <p align="center"><img width="30%" src="images/generic_layer.png" alt="Generic Layer"></p>
+            <p align="center"><img width="30%" src="images/layers/generic_layer.png" alt="Generic Layer"></p>
           </p>
           <hr>
 
@@ -74,7 +74,7 @@
               Error \( = E = \displaystyle\frac{1}{2}\displaystyle\sum_{i=1}^m (x_i - t_i)^2 \)
             </p>
 
-            <p align="center"><img width="30%" src="images/l2_loss_layer.png" alt="Generic Layer"></p>
+            <p align="center"><img width="30%" src="images/layers/l2_loss_layer.png" alt="Generic Layer"></p>
             <p align="center">
               \begin{align}
                 \frac{\partial E}{\partial x_i} &= \frac{1}{2} \cdot 2 \cdot (x_i - t_i) = (x_i - t_i)\\
@@ -126,7 +126,7 @@
             $$
               y_i = \frac{1}{1+e^{-x_i}}
             $$
-            <p align="center"><img width="30%" src="images/sigmoid_layer.png" alt="Sigmoid Layer"></p>
+            <p align="center"><img width="30%" src="images/layers/sigmoid_layer.png" alt="Sigmoid Layer"></p>
             <p align="center">
               \begin{align}
                 \frac{\partial E}{\partial x_i} &= \frac{\partial E}{\partial y_i} \cdot \frac{\partial y_i}{\partial x_i} = \delta y_i \cdot \frac{\partial y_i}{\partial x_i}\\
@@ -204,7 +204,7 @@
             <p align="center">
 
               \( y_j = \displaystyle\sum_{i=1}^m w_{ji} \cdot x_i \) or equivalently in matrix form, \( y = W \times x \), where \(W = \left[ w_{ji} \right]\) is of size \( n \times m \)
-              <img width="60%" src="images/fc_layer.png" alt="Current Input">
+              <img width="60%" src="images/layers/fc_layer.png" alt="Current Input">
             
               $$
                 \begin{align}
