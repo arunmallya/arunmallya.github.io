@@ -226,7 +226,36 @@
 				</section>
 
 				<section>
-					<h3>Backward Pass: Input and Gate Computation</h3>
+					<h3>Backward Pass: Input and Gate Computation - I</h3>
+					<p class="topbar">
+					</p>
+					<table width="100%">
+					<tr>
+			  		<td width="55%">
+			  			<img  src="../images/lstm/back_gates_and_input.png">
+			  		</td>
+			  		<td width="45%">
+			  			\begin{align}
+			  				\text{Forward Pass: } z^t &= \begin{bmatrix} \hat{a}^t \\ \hat{i}^t \\ \hat{f}^t \\ \hat{o}^t \end{bmatrix} = W \times I^t \\
+			  				\text{Given } \delta a^t, \delta i^t , &\delta f^t, \delta o^t, \text{ find } \delta z^t
+			  			\end{align}
+			  			<hr>
+			  			\begin{array}{l|l}
+			  			\begin{align}
+			  				\delta \hat{a}^t &= \delta a^t \odot (1-\tanh^2(a^t))  \\
+			  				\delta \hat{i}^t &= \delta i^t \odot i^t \odot (1-i^t) \\
+			  				\delta \hat{f}^t &= \delta f^t \odot f^t \odot (1-f^t) \\
+			  				\delta \hat{o}^t &= \delta o^t \odot o^t \odot (1-o^t) \\
+			  				\delta z^t &= \left[ \delta\hat{a}^t,  \delta\hat{i}^t,  \delta\hat{f}^t,  \delta\hat{o}^t \right]^T
+			  			\end{align}
+			  			\end{array}
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
+				<section>
+					<h3>Backward Pass: Input and Gate Computation - II</h3>
 					<p class="topbar">
 					</p>
 					<table width="100%">
@@ -237,21 +266,28 @@
 			  		<td width="45%">
 			  			\begin{align}
 			  				\text{Forward Pass: } z^t &= W \times I^t \\
-			  				\text{Given } \delta a^t, \delta i^t &, \delta f^t, \delta o^t, \text{find } \delta o^t, \delta h^{t-1}
+			  				\text{Given } \delta z^t, \text{ find }& \delta W^t, \delta h^{t-1}
 			  			\end{align}
 			  			<hr>
 			  			\begin{align}
-			  				\frac{\partial E}{\partial o^t_i} &= \frac{\partial E}{\partial h^t_i} \cdot \frac{\partial h^t_i}{\partial o^t_i}\\
-			  				&= \delta h^t_i \cdot \tanh(c^t_i) \\
-			  				\therefore \delta o^t &= \delta h^t \odot \tanh(c^t)\\ \\
-
-			  				\frac{\partial E}{\partial c^t_i} &= \frac{\partial E}{\partial h^t_i} \cdot \frac{\partial h^t_i}{\partial c^t_i}\\
-			  				&= \delta h^t_i \cdot o^t_i \cdot (1-\tanh^2(c^t_i))\\
-			  				\therefore \delta c^t &= \delta h^t \odot o^t \odot (1-\tanh^2(c^t))
+			  				\delta I^t &= W^T \times \delta z^t\\
+			  				\text{As } I^t &= \begin{bmatrix} x^t \\ h^{t-1} \end{bmatrix} \text{, }\\
+			  				 \delta h^{t-1} &\text{ can be retrieved from } \delta I^t\\
+			  				\delta W^t &= \delta z^t \times (X^t)^T\\
 			  			\end{align}
 			  		</td>
 				  	</tr>
 					</table>
+				</section>
+
+				<section>
+					<h3>Parameter Update</h3>
+					If input \(x\) has \(T\) time-steps, i.e. \( x = [ x^1, x^2, \cdots, x^T ] \), then 
+					\begin{align}
+						\delta W &= \sum_{t = 1}^T \delta W^t \\
+					\end{align}
+					\(W\) is then updated using an appropriate Stochastic Gradient Descent solver.
+
 				</section>
 
 			</div>
