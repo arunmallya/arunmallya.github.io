@@ -1,4 +1,7 @@
 <!doctype html>
+
+<!-- Made using reveal.js by Hakim El Hattab: http://lab.hakim.se/reveal-js/#/ -->
+
 <html lang="en">
 
 	<head>
@@ -6,12 +9,11 @@
 
 		<title>LSTM</title>
 
-		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-		<meta name="author" content="Hakim El Hattab">
-
+		<meta name="description" content="An introduction to LSTM Forward and Backward Pass">
+		<meta name="author" content="Arun Mallya">
+		
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<link rel="stylesheet" href="css/reveal.css">
@@ -46,6 +48,16 @@
 			<div class="slides">
 				
 				<section>
+					<h3>LSTM Forward and Backward Pass</h3>
+					<h4>Introduction</h4>
+					Hi, I'm <a  target="_blank" href="http://arunmallya.github.io"> Arun</a>, a graduate student at UIUC. </br></br>
+					While trying to learn more about recurrent neural networks, I had a hard time finding a source which explained the math behind an LSTM, especially the backpropagation, which is a bit tricky for someone new to the area. Frameworks such as <a href="http://torch.ch/">Torch</a> and <a href="http://deeplearning.net/software/theano/">Theano</a> make life easy through automatic differentiation, which takes away the pain of having to manually compute gradient equations. However, to gain a better understanding of how things actually work and satisfy curiosity, we must dive into the details. This is an attempt at presenting the LSTM forward and backward equations in a manner which can be easily digested.</br></br>
+
+					I would recommend going through <a target="_blank" href="http://arunmallya.github.io/writeups/nn/backprop.html">A Quick Introduction to Backpropagation</a> before proceeding further, to familiarize oneself with how backpropagation and the chain rule work, as well as the notation used in the slides that follow. Basic knowledge of neural networks, elementary calculus and matrix algebra is recommended.
+
+				</section>
+
+				<section>
 					<h3>Forward Pass: Initial State</h3>
 					<p class="topbar">
 						Initially, at time \(t\), the memory cells of the LSTM contain values from the 
@@ -74,10 +86,10 @@
 			  		</td>
 			  		<td width="45%">
 			  			\begin{align}
-			  				a^t &= \text{tanh}(W_cx^t + U_ch^{t-1}) \\
-			  				i^t &= \sigma(W_ix^t + U_ih^{t-1}) \\
-			  				f^t &= \sigma(W_fx^t + U_fh^{t-1}) \\
-			  				o^t &= \sigma(W_ox^t + U_oh^{t-1})
+			  				a^t &= \tanh(W_cx^t + U_ch^{t-1}) = \tanh(\hat{a}^t) \\
+			  				i^t &= \sigma(W_ix^t + U_ih^{t-1}) = \sigma(\hat{i}^t)  \\
+			  				f^t &= \sigma(W_fx^t + U_fh^{t-1}) = \sigma(\hat{f}^t) \\
+			  				o^t &= \sigma(W_ox^t + U_oh^{t-1}) = \sigma(\hat{o}^t)
 			  			\end{align}
 			  			</br>
 			  			<hr>
@@ -95,7 +107,7 @@
 					</table>
 					<p class="topbar">
 						If the input \(x^t\) is of size \(n \times 1\), and we have \(d\) memory cells, then the size of each of \(W_\ast\) and \(U_\ast\) is \(d \times n\), and and \(d \times d \) resp. The size of \(W\) will then be \(4d \times (n+d)\). 
-						Note that each one of the \(d\) memory cells has its own weights \(W_\ast\) and \(U_\ast\), and that the only time cell values are shared is during the product with \(U_\ast\).
+						Note that each one of the \(d\) memory cells has its own weights \(W_\ast\) and \(U_\ast\), and that the only time memory cell values are shared with other LSTM units is during the product with \(U_\ast\).
 					</p>
 				</section>
 

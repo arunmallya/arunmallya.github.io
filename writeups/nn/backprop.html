@@ -4,6 +4,10 @@
 <html>
   <head>
     <meta name="generator" content="HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org">
+
+    <meta name="description" content="A Quick Introduction to Backpropagation">
+    <meta name="author" content="Arun Mallya">
+
     <style type="text/css">
       /* Layout and HTML pieces the work of Jon Barron http://www.cs.berkeley.edu/~barron/ */
       a {
@@ -44,7 +48,7 @@
       <tr>
 	      <td> 
 
-          <p align="center"><font size="6">Backpropagation</font></p>  
+          <p align="center"><font size="6"> A Quick Introduction to Backpropagation</font></p>  
           <hr>
 
           <p> 
@@ -98,20 +102,20 @@
             <p align="center"><b> <a name="log_loss_layer">Log Loss Layer</a></b></p>
             The log loss also measure the deviation of the input \(x\) from the true output targets \(t\), but using a different equation shown below.
             <p align="center">
-              Error \( = E = -\displaystyle\sum_{i=1}^m t_i\log x_i + (1-t_i) \log (1-x_i) \)
+              Error \( = E = -\displaystyle\sum_{i=1}^m t_i \log x_i \)
             </p>
             <hr width="40%">
             <p align="center">
               \begin{align}
-                \frac{\partial E}{\partial x_i} &= -\frac{t_i}{x_i} +  \frac{(1-t_i)}{(1-x_i)} = \frac{x_i-t_i}{x_i(1-x_i)} \\
-                \delta x &= \left[ \frac{\partial E}{\partial x_i} \right]_i = (x - t) \odot \frac{1}{x} \odot \frac{1}{(1-x)}
+                \frac{\partial E}{\partial x_i} &= -\frac{t_i}{x_i} \\
+                \delta x &= \left[ \frac{\partial E}{\partial x_i} \right]_i = - t \odot \frac{1}{x}
               \end{align}
               \(\delta x\) and \( t \) are of size \(m \times 1\)
 
               $$
                 \boxed{
                   \begin{align}
-                    \delta x &= (x - t) \odot \frac{1}{x} \odot \frac{1}{(1-x)} \\
+                    \delta x &= - t \odot \frac{1}{x}  \\
                     \delta w &= \text{N.A.}
                   \end{align}
                 }
