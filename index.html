@@ -49,7 +49,7 @@
       <tr>
 	      <td> 
 
-          <table width="100%" align="center" border="0" cellpadding="10">
+          <table id="intro" width="100%" align="center" border="0" cellpadding="10">
             <tr>
               <td width="67%" valign="middle">
 		            <p align="center"><font size="6">Arun Mallya</font></p>
@@ -74,7 +74,7 @@
             </tr> 
           </table>
 
-          <table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+          <table id="heading" width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
             <tr>
               <td>
                 <font size="5">Research</font>
@@ -82,9 +82,36 @@
             </tr>
           </table>
 
-      	  <table width="100%" align="center" border="0" cellpadding="20">
+      	  <table id="workworkwork" width="100%" align="center" border="0" cellpadding="20">
 
-            <tr onmouseout="defocus_stop()" onmouseover="defocus_start()" >
+            <tr id="eccv16-action">
+              <td width="25%" valign="top">
+                <img src="teasers/action_net.png" width="160" style="border-style: none">
+              </td>
+              <td width="75%" valign="center">
+                <p>
+                  <b>Learning Models for Actions and Person-Object Interactions with Transfer to Question Answering</b><br>
+                  <strong>Arun Mallya</strong>, <a href="http://web.engr.illinois.edu/~slazebni/">Svetlana Lazebnik</a><br>
+                  Accepted at the <i>European Conference on Computer Vision (ECCV)</i>, 2016 <br> 
+                  <a href="http://arxiv.org/abs/1604.04808">[arxiv preprint]</a> 
+                </p>
+              </td>
+            </tr>
+
+            <tr id="bmvc16-vqa">
+              <td width="25%" valign="top">
+                <img src="teasers/bmvc_big.png" width="160" style="border-style: none">
+              </td>
+              <td width="75%" valign="center">
+                <p>
+                  <b>Solving Visual Madlibs with Multiple Cues</b><br>
+                  <a href="http://www.tatianatommasi.com/">Tatiana Tommasi</a>, <strong>Arun Mallya</strong>, Bryan Plummer, <a href="http://web.engr.illinois.edu/~slazebni/">Svetlana Lazebnik</a>, <a href="http://acberg.com/">Alex Berg</a>, <a href="http://tamaraberg.com/">Tamara Berg</a><br>
+                  Accepted at the <i>British Machine Vision Conference (BMVC)</i>, 2016 <br> 
+                </p>
+              </td>
+            </tr>
+
+            <tr id="iccv15-indoor" onmouseout="defocus_stop()" onmouseover="defocus_start()" >
               <td width="25%">
                 <div id='room' class='hidden' ><a href="teasers/room-2.png"><img src="teasers/room-1.png"></a></div>
                 <div id='edge' ><a href="teasers/room-1.png"><img src="teasers/room-2.png"></a></div>
@@ -100,10 +127,10 @@
                   defocus_stop()
                 </script>
               </td>
-              <td width="75%" valign="top">
+              <td width="75%" valign="center">
                 <p>
                   <b>Learning Informative Edge Maps for Indoor Scene Layout Prediction</b><br>
-                  <strong>Arun Mallya</strong>, <a href="ttp://web.engr.illinois.edu/~slazebni/">Svetlana Lazebnik</a><br>
+                  <strong>Arun Mallya</strong>, <a href="http://web.engr.illinois.edu/~slazebni/">Svetlana Lazebnik</a><br>
                   <i>International Conference on Computer Vision (ICCV)</i>, 2015 <br> 
                   <a href="http://slazebni.cs.illinois.edu/publications/iccv15_informative.pdf">[pdf]</a>
                   <a href="http://vision.cs.illinois.edu/downloads/indoor_scene_ICCV15/hedau+.tar.gz">[hedau+ dataset]</a>
@@ -115,11 +142,11 @@
               </td>
             </tr>
 
-      	    <tr>
-      	      <td width="25%" valign="top">
+      	    <tr id="bmvc15-birds">
+      	      <td width="25%" valign="center">
       		      <img src="teasers/bird.png" width="160" style="border-style: none">
       	      </td>
-      	      <td width="75%" valign="top">
+      	      <td width="75%" valign="center">
       		      <p>
                   <b>Part Localization using Multi-Proposal Consensus for Fine-Grained Categorization</b><br>
                   <a href="http://web.engr.illinois.edu/~kjshih2/index.html">Kevin J. Shih</a>, <strong>Arun Mallya</strong>, <a href="http://www.saurabhsingh.info/">Saurabh Singh</a>, <a href="http://dhoiem.cs.illinois.edu/">Derek Hoiem</a><br>
@@ -127,17 +154,15 @@
                   <a href="http://arxiv.org/abs/1507.06332">[arxiv preprint]</a> 
                   <a href="files/BMVC_15_Poster.pdf">[poster]</a> 
                   <a href="http://vision.cs.illinois.edu/keypoint_consensus/">[webpage]</a>
-
-                  <!--<a href="http://vision.cs.illinois.edu/downloads/BMVC15/alexnet_vis_and_loc_BMVC15.tar.gz">[caffe model (206MB)]</a> <a href="http://vision.cs.illinois.edu/downloads/BMVC15/part_predictions_BMVC15.tar.gz">[CUB part predictions]</a>-->
       		      </p>
       	      </td>
       	    </tr>
 
-            <tr>
+            <tr id="wacv-ped">
               <td width="25%" valign="top">
                 <img src="teasers/ped.png" width="160" style="border-style: none">
               </td>
-              <td width="75%" valign="top">
+              <td width="75%" valign="center">
                 <p>
                   <b>Unsupervised Deep Network Pretraining via Human Design</b><br>
                   <a href="http://mingyuliu.net/">Ming-Yu Liu</a>, <strong>Arun Mallya</strong>, <a href="http://www.merl.com/people/oncel">Oncel C. Tuzel</a>, Xi Chen<br>
@@ -151,7 +176,7 @@
           </table>
 
           <hr>
-          <table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+          <table id="other_stuff" width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
             <tr>
               <td>
                 <font size="5">Writeups/Notes</font></br>
@@ -169,7 +194,7 @@
           </table>
 
 
-          <table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+          <table id="thanks" width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
             <tr>
               <td>
                 <br>
