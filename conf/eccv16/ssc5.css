@@ -1,0 +1,114 @@
+* {
+    max-height: 999999px; //stops android font resizing
+}
+
+body    {
+    margin-top:         24px;
+    min-width:          384px;
+    margin-left:        0px;
+    padding-left:       0px;
+}
+
+div.left {
+ // border:             1px solid red;
+ // border-right:       1px solid black;
+ // border-top:		1px solid gray;
+    display:            inline;
+    float:              left;
+    padding:            16px;
+    padding-left:       0;
+
+    margin:             0;
+    font-weight:        bold;
+}
+
+div.right {
+//  border:             1px solid black;
+    border-left:        3pt solid rgb(64,196,64);
+    display:            block;
+    padding:            16px;
+    padding-bottom:     24px;
+    padding-right:      0;
+    margin:             0;
+}
+
+@media (min-width: 385px) {
+    div.left {
+        width:          20%;
+        text-align:     right;
+        clear:          all;
+    }
+
+    div.right {
+        width:          60%;
+        width:          calc(79% - 36px);
+        max-width:      600pt;
+      //border-left:    13pt solid rgb(255,196,64);
+        float:          left;
+    }
+
+    div.righter {
+        clear: both;
+    }
+
+    hr.sep1, hr.sep2 {
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+}
+
+@media (max-width: 384px) {
+    div.left {
+        width:          20%;
+        margin:         0px;
+        padding:        0px;
+        margin-left:    0px;
+        text-align:     center;
+        display:        block;
+    }
+
+    div.right {
+        width:          80%;
+      //border-left:        13pt solid rgb(255,196,64);
+        padding:            8px;
+        margin-left:        8px;
+        display: block;
+        clear: left;
+    }
+
+    hr.sep1, hr.sep2 {
+        border: 0pt;
+        border-top: 3pt solid rgb(64,196,64);
+        margin: 0px;
+        padding: 0px;
+    }
+
+    hr.sep1 {
+        margin-bottom: 6pt;
+    }
+
+    hr.sep2 {
+        margin-top: 6pt;
+    }
+}
+
+ul {
+    margin-top:         0px;
+    color:              rgb(150,150,150);
+    list-style-type:    square;
+}
+
+a {
+    color:		rgb(0,0,196);
+}
+
+
+a:visited {
+    color:		rgb(200,100,0);
+}
+
+a:hover {
+    color:		rgb(0,0,128);
+background-color:	rgb(128,128,255);
+}
