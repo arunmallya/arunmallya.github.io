@@ -27,6 +27,15 @@
       font-size: 15px;
       font-weight: 700
       }
+      #teaser-td {
+      text-align: center;
+      margin: auto; 
+      display: block;
+      }
+      #teaser {
+      width: 160px;
+      border-style: none;
+      }
     </style>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <title>Arun Mallya</title>
@@ -84,10 +93,23 @@
           </table>
 
       	  <table id="workworkwork" width="100%" align="center" border="0" cellpadding="20">
+            
+            <tr id="cvpr17-grounding+vrd">
+              <td width="25%" valign="top">
+                <img id="teaser" src="teasers/grounding.png">
+              </td>
+              <td width="75%" valign="center">
+                <p>
+                  <b>Phrase Localization and Visual Relationship Detection with Comprehensive Linguistic Cues</b><br>
+                  Bryan A. Plummer, <strong>Arun Mallya</strong>, Christopher M. Cervantes, <a target="_blank" href="http://juliahmr.cs.illinois.edu/"> Julia Hockenmaier</a>, <a target="_blank" href="http://web.engr.illinois.edu/~slazebni/">Svetlana Lazebnik</a><br>
+                  <a target="_blank" href="https://arxiv.org/abs/1611.06641">[arxiv preprint]</a> 
+                </p>
+              </td>
+            </tr>
 
             <tr id="simple-vqa">
-              <td width="25%" valign="top">
-                <img width="160" style="border-style: none">
+              <td id="teaser-td" width="25%" valign="top">
+                <img id="teaser" src="http://torch.ch/static/torch-logo.png">
               </td>
               <td width="75%" valign="center">
                 <p>
@@ -100,7 +122,7 @@
 
             <tr id="eccv16-action">
               <td width="25%" valign="top">
-                <img src="teasers/action_net.png" width="160" style="border-style: none">
+                <img id="teaser" src="teasers/action_net.png">
               </td>
               <td width="75%" valign="center">
                 <p>
@@ -115,7 +137,7 @@
 
             <tr id="bmvc16-vqa">
               <td width="25%" valign="top">
-                <img src="teasers/bmvc_big.png" width="160" style="border-style: none">
+                <img id="teaser" src="teasers/bmvc_big.png">
               </td>
               <td width="75%" valign="center">
                 <p>
@@ -163,7 +185,7 @@
 
       	    <tr id="bmvc15-birds">
       	      <td width="25%" valign="center">
-      		      <img src="teasers/bird.png" width="160" style="border-style: none">
+      		      <img id="teaser" src="teasers/bird.png">
       	      </td>
       	      <td width="75%" valign="center">
       		      <p>
@@ -179,7 +201,7 @@
 
             <tr id="wacv-ped">
               <td width="25%" valign="top">
-                <img src="teasers/ped.png" width="160" style="border-style: none">
+                <img id="teaser" src="teasers/ped.png">
               </td>
               <td width="75%" valign="center">
                 <p>
