@@ -164,8 +164,13 @@
               \begin{align}
                 \frac{\partial E}{\partial x_i} &= \sum_{j=1}^n \left( \frac{\partial E}{\partial y_j} \cdot \frac{\partial y_j}{\partial x_i} \right)\\
                 \text{If } i=j, \frac{\partial y_i}{\partial x_i} &=  \frac{\partial}{\partial x_i} \left\{ \frac{e^{x_i}}{\sum_{k=1}^m e^{x_k}} \right\}\\
-                &= \frac{ e^{x_i} - \left(e^{x_i}\right)^2} { \left(\sum_{k=1}^m e^{x_k}\right)^{2} } \\
-                &= \frac{ e^{x_i}} {\sum_{k=1}^m e^{x_k} } \cdot \frac{ 1-e^{x_i}} { \sum_{k=1}^m e^{x_k} }\\
+                
+                &= \frac{ e^{x_i}\left(\sum_{k=1}^m e^{x_k}\right) - \left(e^{x_i}\right)^2} { \left(\sum_{k=1}^m e^{x_k}\right)^{2} } \\
+                
+                &= \frac{ e^{x_i} } { \sum_{k=1}^m e^{x_k} }- \frac{ \left(e^{x_i}\right)^2 } { \left(\sum_{k=1}^m e^{x_k}\right)^{2} } \\
+
+                &= \frac{ e^{x_i} } { \sum_{k=1}^m e^{x_k} } \left( 1- \frac{ e^{x_i} } { \sum_{k=1}^m e^{x_k} } \right) \\
+                
                 &= y_i \cdot (1-y_i)\\
                 &= y_i \cdot (\mathbf{1}\{ i=j \} - y_j)\\
                 \text{If } i\neq j, \frac{\partial y_i}{\partial x_i} &=  \frac{\partial}{\partial x_i} \left\{ \frac{e^{x_j}}{\sum_{k=1}^m e^{x_k}} \right\}\\
