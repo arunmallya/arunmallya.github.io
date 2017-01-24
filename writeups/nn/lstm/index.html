@@ -179,7 +179,36 @@
 					</table>
 				</section>
 
+				<section>
+					<h3>Forward Pass: Unrolled Network</h3>
+					<p class="topbar">
+						The unrolled network during the forward pass is shown below. Note that the gates have not been shown for brevity. An interesting point to note here is that in the computational graph below, the cell state at time \( T \), \( c^T \) is responsible for computing \( h^T \) as well as the next cell state \( c^{T+1} \).
+						At each time step, the cell output \( h^T \) is shown to be passed to some more layers on which a cost function \( C^T \) is computed, as the way an LSTM would be used in a typical application like captioning or language modeling.
+					</p>
+					<table width="40%">
+					<tr>
+			  		<td width="100%">
+			  			<img  src="../images/lstm/unrolled_forward.png">
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
 				<!-- Backward Pass -->
+				<section>
+					<h3>Backward Pass: Unrolled Network</h3>
+					<p class="topbar">
+						The unrolled network during the backward pass is shown below. All the arrows in the previous slide have now changed their direction. The cell state at time \( T \), \( c^T \) receives gradients from \( h^T \) as well as the next cell state \( c^{T+1} \). The next few slides focus on computing these two gradients. At any time step \( T \), these two gradients are accumulated before being backpropagated to the layers below the cell and the previous time steps.
+					</p>
+					<table width="40%">
+					<tr>
+			  		<td width="100%">
+			  			<img  src="../images/lstm/unrolled_backward.png">
+			  		</td>
+				  	</tr>
+					</table>
+				</section>
+
 				<section>
 					<h3>Backward Pass: Output</h3>
 					<p class="topbar">
@@ -205,7 +234,7 @@
 			  				\therefore \delta c^t & \color{red}+= \color{black}\delta h^t \odot o^t \odot (1-\tanh^2(c^t))
 			  			\end{align}
 			  		</br>
-			  			Note that the \(\color{red} += \) above is so that this gradient is added to gradient from time step \( (t+1) \) (calculated on next slide)
+			  			Note that the \(\color{red} += \) above is so that this gradient is added to gradient from time step \( (t+1) \) (calculated on next slide, refer to the gradient accumulation mentioned in the previous slide)
 			  		</td>
 				  	</tr>
 					</table>
