@@ -18,6 +18,9 @@
       font-family: 'Lato', Verdana, Helvetica, sans-serif;
       font-size: 14px
       }
+      tr {
+        padding: 20px;
+      }
       strong {
       font-family: 'Lato', Verdana, Helvetica, sans-serif;
       font-size: 14px
@@ -25,7 +28,7 @@
       heading {
       font-family: 'Lato', Verdana, Helvetica, sans-serif;
       font-size: 15px;
-      font-weight: 700
+      font-weight: 700;
       }
       #teaser-td {
       text-align: center;
@@ -33,8 +36,13 @@
       display: block;
       }
       #teaser {
-      width: 160px;
+      width: 200px;
       border-style: none;
+      margin-left: auto;
+      margin-right: auto;
+      }
+      hr {
+      border: 1px solid black;
       }
     </style>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
@@ -60,7 +68,7 @@
 
           <table id="intro" width="100%" align="center" border="0" cellpadding="10">
             <tr>
-              <td width="67%" valign="middle">
+              <td width="60%" valign="middle">
 		            <p align="center"><font size="6">Arun Mallya</font></p>
 		            <p align="justify">
                   I am a Research Scientist at Nvidia Research.</br>
@@ -80,9 +88,9 @@
                   <a href="http://arunmallya.com">webpage</a>
 		            </p>
               </td>
-              <td width="20%">
+              <td width="17%">
                 <br><br>
-  		          <img width="120%" src="images/arun_mallya.png" alt="A M">
+  		          <img width="100%" src="images/arun_mallya.png" alt="A M">
 	           </td>
             </tr> 
           </table>
@@ -95,8 +103,42 @@
             </tr>
           </table>
 
-      	  <table id="workworkwork" width="100%" align="center" border="0" cellpadding="20">
-            
+      	  <table id="workworkwork" width="100%" align="center" cellpadding="20" style="background-color:#6AFF1C4D;">  
+            <tr>
+                <td colspan="2" style="padding-bottom:0;">
+                  <font size="3"><b>Generative Networks</b></font><hr>
+                </td>
+            </tr>
+
+            <tr id="funit_iccv2019">
+              <td width="25%" valign="top">
+                <img id="teaser" src="conf/iccv19_funit/teaser.gif">
+              </td>
+              <td width="75%" valign="center">
+                <p>
+                  <b>Few-Shot Unsupervised Image-to-Image Translation</b><br>
+                  <a target="_blank" href="http://mingyuliu.net/">Ming-Yu Liu</a>,
+                  <a target="_blank" href="http://www.cs.cornell.edu/~xhuang/">Xun Huang</a>,
+                  <strong>Arun Mallya</strong>, 
+                  <a target="_blank" href="https://research.nvidia.com/person/tero-karras">Tero Karras</a>,
+                  <a target="_blank" href="https://users.aalto.fi/~ailat1/">Timo Aila</a>,
+                  <a target="_blank" href="https://users.aalto.fi/~lehtinj7/">Jaakko Lehtinen</a>,
+                  <a target="_blank" href="http://jankautz.com/">Jan Kautz</a><br>
+                  <i>International Conference on Computer Vision</i> (ICCV), 2019 <br>
+                  <!-- <a target="_blank" href="https://arxiv.org/abs/1801.06519">[arxiv preprint]</a>  -->
+                  <!-- <a target="_blank" href="https://github.com/arunmallya/piggyback18">[code]</a> -->
+                </p>
+              </td>
+            </tr>
+
+          </table>
+          <table id="workworkwork" width="100%" align="center" cellpadding="20" style="background-color:#76E4E84D;">  
+            <tr>
+                <td colspan="2" style="padding-bottom:0;">
+                  <font size="3"><b>Efficient and Multi-Task Networks</b></font><hr>
+                </td>
+            </tr>
+
             <tr id="pruning_cvpr2019">
               <td width="25%" valign="top">
                 <img id="teaser" src="teasers/pruning_cvpr2019.png">
@@ -146,6 +188,14 @@
               </td>
             </tr>
 
+          </table>
+          <table id="workworkwork" width="100%" align="center" cellpadding="20" style="background-color:#AD8FFF4D;">  
+            <tr>
+                <td colspan="2" style="padding-bottom:0;">
+                  <font size="3"><b>Vision and Language</b></font><hr>
+                </td>
+            </tr>
+
             <tr id="imsitu">
               <td width="25%" valign="top">
                 <img id="teaser" src="teasers/imsitu.png">
@@ -175,7 +225,7 @@
               </td>
             </tr>
 
-            <tr id="simple-vqa">
+            <!-- <tr id="simple-vqa">
               <td id="teaser-td" width="25%" valign="top">
                 <img id="teaser" src="http://torch.ch/static/torch-logo.png">
               </td>
@@ -186,7 +236,7 @@
                   can be found <a target="_blank" href="https://github.com/arunmallya/simple-vqa">here</a>.
                 </p>
               </td>
-            </tr>
+            </tr> -->
 
             <tr id="eccv16-action">
               <td width="25%" valign="top">
@@ -227,6 +277,14 @@
                   
                 </p>
               </td>
+            </tr>
+
+          </table>
+          <table id="workworkwork" width="100%" align="center" cellpadding="20" style="background-color:#E876784D;">  
+            <tr>
+                <td colspan="2" style="padding-bottom:0;">
+                  <font size="3"><b>Structured Prediction</b></font><hr>
+                </td>
             </tr>
 
             <tr id="iccv15-indoor" onmouseout="defocus_stop()" onmouseover="defocus_start()" >
